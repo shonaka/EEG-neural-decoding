@@ -122,3 +122,5 @@ results/*.csv
 *.tmp
 *.db
 *.db-journal
+
+.DS_Store
