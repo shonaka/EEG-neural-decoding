@@ -1,0 +1,36 @@
+name: phd_aim1
+channels:
+    - https://conda.anaconda.org/menpo
+    - conda-forge
+    - ioam
+    - soumith
+    - bioconda
+dependencies:
+    - python=3.6
+    - autopep8
+    - catboost
+    - h5py
+    - jupyter
+    - matplotlib
+    - numba
+    - numpy
+    - pandas
+    - pylint
+    - pytorch
+    - ruamel.yaml
+    - scikit-learn
+    - scipy
+    - seaborn
+    - tqdm
+    - tensorflow-gpu
+    - xgboost
+    - yapf
+    - pip:
+        - cupy-cuda90
+        - torchvision
+        - torchsummary
+        - optuna
+        - fastai==1.0.3
+        - lightgbm
+        - adabound
+        - mne

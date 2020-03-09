@@ -1,0 +1,169 @@
+# =============================
+# =====  Basic variables  =====
+# =============================
+
+# Header for the experiment (This is going to be in your file & folder names for log)
+exp: "test"
+
+# Which feature of importance to perform
+# 0 = Channel based
+# 1 = Tap based
+feature:
+  type: 0
+
+# Specify the type of permutation
+# 0 = permutate normally
+# 1 = replace with zeros
+permutate:
+  type: 0
+
+fix:
+  do: 0
+
+# Data path (which data to use)
+data:
+  path: 'peri_hinf_delta'
+  compressed: 'avatar'
+
+# Configuration file
+num_chan_eeg: 46
+num_chan_kin: 6
+header: "ML"
+cuda: 0
+
+# Defining names
+name:
+  log: ".py.log"
+
+# Standardize related
+standardize:
+  do: 1 # Do = 1, Don't = 0
+
+# Downsampling related
+downsample:
+  do: 0 # Do = 1, Don't = 0
+  factor: 10 # if factor 10, the downsampled frequency is 1/10.
+
+# Augment related
+# Like in Kalman, have it's derivatives combined for stabilization.
+# e.g. pos and vel instead of just having position
+augment:
+  do: 0
+  type: "gradient"
+
+
+# ================================================
+# =====  Common parameters for all decoders  =====
+# ================================================
+
+# For time embedding
+tap_size: 4
+future_step: 1 # Haven't tested more than 1 yet
+
+# Choose the decoding type
+decode_type: "LR"
+
+# Used to change input dimensions and optimizations
+input_2d_decoders: ["LR", "RR", "KNN", "BRR", "KF", "UKF", "XGB", "LGB", "CB"]
+input_3d_decoders: ["LSTM", "GRU", "QRNN", "TCN"]
+rnn_decoders: ["LSTM", "GRU", "QRNN"]
+cnn_decoders: ["TCN"]
+
+
+# ============================================
+# =====  Parameters for Linear Decoders  =====
+# ============================================
+
+# Ridge regression
+rr:
+  alpha: 1.0
+
+
+# ===========================================
+# =====  Parameters for Kalman Filters  =====
+# ===========================================
+
+# Kalman Filter
+kalman:
+  order: 1
+  lambda_F: 1
+  lambda_B: 5  # After multiple optimization this is the best
+  gpu: 0
+
+# UKF
+ukf:
+  kappa: 1.0
+  augsize: 13
+  decomp_type: 'cholesky' # 'cholesky' gives singularity problems
+  gpu: 0
+
+
+# ================================================
+# =====  Parameters for Boosting Algorithms  =====
+# ================================================
+
+xgb:
+  eta: 0.01
+  max_depth: 4
+  min_child_weight: 1
+  gpu: 0 # 1 for on, 0 for off
+
+lgb:
+  learning_rate: 0.01
+  max_depth: 4
+  num_leaves: 31 # Should be smaller than 2^(max_depth)
+  min_data_in_leaf: 20
+  gpu: 0 # 1 for on, 0 for off
+
+cb:
+  lr: 0.01
+  depth: 4
+  l2: 3
+
+
+# ==========================================
+# =====  Parameters for Deep Learning  =====
+# ==========================================
+
+# Training
+num_epochs: 10
+batch_size: 32
+
+# Loss function
+loss_type: "MSE"
+
+# Optimizer
+optim:
+  type: 'adam'
+  amsgrad: True
+  lr: 0.001
+  loss: 'mean_square'
+  clip: 0.50
+  weight_decay: 0.0001
+
+# For RNN based models
+rnn:
+  num_hidden: 32
+  num_stack_layers: 2
+
+# For TCN based models
+tcn:
+  num_hidden: 32
+  num_layers: 2
+  kernel_size: 7
+  dropout: 0.5
+
+# For Fully-connected layers
+fc:
+  activator: 'linear'
+
+# For initialization of the layers
+init:
+  mean: 0
+  std: 0.01
+
+# For dropout layers
+dropout:
+  rate1: 0.5
+  rate2: 0.5
+  rate3: 0.5
